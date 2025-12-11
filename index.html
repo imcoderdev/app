@@ -1,150 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StandardSimplified | Smart Audit</title>
     <style>
-        :root { --primary: #2563eb; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; --card: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); padding: 20px; color: #333; }
-        .container { max-width: 700px; margin: 0 auto; }
-        
-        /* Header */
-        header { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 800; color: var(--primary); font-size: 1.2rem; }
-        
-        /* Card */
-        .check-card { background: var(--card); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 6px solid #94a3b8; }
-        .check-card.passed { border-left-color: var(--success); }
-        .check-card.failed { border-left-color: var(--danger); }
-        
-        .test-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 5px; }
-        .std-ref { font-size: 0.85rem; color: #64748b; margin-bottom: 15px; }
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
 
-        /* The Input Section */
-        .input-group { display: flex; gap: 10px; align-items: center; background: #f1f5f9; padding: 15px; border-radius: 8px; }
-        input { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100px; font-size: 1.1rem; text-align: center; }
-        label { font-weight: 600; font-size: 0.9rem; flex-grow: 1; }
-        
-        .btn-check { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn-check:hover { background: #1d4ed8; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            padding: 15px;
+            margin: 0;
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Header - Stacked on Mobile */
+        header {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: row;
+            /* Default row for desktop */
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .client-name {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        /* Cards */
+        .check-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            border-left: 6px solid #cbd5e1;
+            transition: transform 0.2s;
+        }
+
+        .check-card.passed {
+            border-left-color: var(--success);
+        }
+
+        .check-card.failed {
+            border-left-color: var(--danger);
+        }
+
+        .test-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .std-ref {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+
+        /* Mobile-Friendly Inputs */
+        .input-group {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            /* Stack by default on mobile */
+            gap: 10px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            text-align: center;
+            width: 100%;
+            /* Full width */
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-check {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .btn-check:active {
+            transform: scale(0.96);
+        }
 
         /* Results */
-        .result-box { margin-top: 15px; padding: 15px; border-radius: 6px; display: none; }
-        .result-box.fail { background: #fee2e2; color: var(--danger); border: 1px solid var(--danger); }
-        .result-box.pass { background: #dcfce7; color: var(--success); border: 1px solid var(--success); }
+        .result-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease-in;
+        }
 
+        .result-box.fail {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .result-box.pass {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                gap: 5px;
+                align-items: flex-start;
+            }
+
+            .client-name {
+                text-align: left;
+            }
+
+            .input-row {
+                flex-direction: column;
+            }
+
+            .btn-check {
+                width: 100%;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <header>
-        <div class="logo">StandardSimplified ⚡</div>
-        <div style="font-size: 0.9rem;">Client: <b>Slidewell Pvt Ltd</b></div>
-    </header>
+    <div class="container">
+        <header>
+            <div class="logo">StandardSimplified ⚡</div>
+            <div class="client-name">
+                Client: <b>Slidewell Pvt Ltd</b><br>
+                <span style="font-size:0.75rem; color:#94a3b8;">Ref: Manak Manthan</span>
+            </div>
+        </header>
 
-    <div id="app"></div>
+        <div id="app"></div>
 
-</div>
+        <div style="text-align:center; color:#94a3b8; font-size:0.8rem; margin-top:30px;">
+            Built by Standards Club, KKWIEER 🎓
+        </div>
+    </div>
 
-<script>
-    // 1. The "Smart" Data (We add 'limit' and 'operator' here)
-    // In the real app, Python extracts these numbers from the PDF.
-    const standardTests = [
-        { 
-            id: 1, 
-            title: "Leakage Current Test", 
-            clause: "IS 302-1 Clause 13.2", 
-            input_label: "Measured Current (mA)", 
-            limit: 0.75, 
-            operator: "<", // Value must be LESS than limit
-            fix_advice: "Check the heating element insulation. Ensure the Mica sheet is not cracked."
-        },
-        { 
-            id: 2, 
-            title: "High Voltage (Dielectric) Test", 
-            clause: "IS 302-1 Clause 13.3", 
-            input_label: "Breakdown Voltage (kV)", 
-            limit: 1.5, 
-            operator: ">", // Value must be GREATER than limit
-            fix_advice: "Moisture detected in the assembly. Bake the component at 80°C for 2 hours."
-        },
-        { 
-            id: 3, 
-            title: "Earthing Resistance", 
-            clause: "IS 302-1 Clause 27", 
-            input_label: "Resistance (Ohms)", 
-            limit: 0.1, 
-            operator: "<", 
-            fix_advice: "Tighten the green wire screw on the chassis. Clean rust from the contact point."
-        },
-{
-  "id": 3,
-  "title": "Heating Test Overpower Setup",
-  "clause": "IS 302-1 Clause 13.1",
-  "input_label": "Rated Power Input Multiplier",
-  "limit": 1.15,
-  "operator": "=",
-  "fix_advice": "Adjust the voltage regulator until the wattmeter reads exactly 1.15 times the rated power."
-}
-    ];
+    <script>
+        const standardTests = [
+            {
+                id: 1,
+                title: "Leakage Current Test",
+                clause: "IS 302-1 Clause 13.2",
+                input_label: "Measured Current (mA)",
+                limit: 0.75,
+                operator: "<",
+                fix_advice: "Check heating element insulation (Mica sheet). Ensure no moisture ingress."
+            },
+            {
+                id: 2,
+                title: "High Voltage Test",
+                clause: "IS 302-1 Clause 13.3",
+                input_label: "Breakdown Voltage (kV)",
+                limit: 1.5,
+                operator: ">",
+                fix_advice: "Insulation weak. Bake component at 80°C for 2 hours to remove moisture."
+            },
+            {
+                id: 3,
+                title: "Earthing Resistance",
+                clause: "IS 302-1 Clause 27",
+                input_label: "Resistance (Ohms)",
+                limit: 0.1,
+                operator: "<",
+                fix_advice: "Tighten green wire screw. Clean rust from chassis contact point."
+            },
+            {
+                "id": 4,
+                "title": "Heating Test Overpower Setup",
+                "clause": "IS 302-1 Clause 13.1",
+                "input_label": "Rated Power Input Multiplier",
+                "limit": 1.15,
+                "operator": "=",
+                "fix_advice": "Adjust the voltage regulator until the wattmeter reads exactly 1.15 times the rated power."
+            }
+        ];
 
-    const app = document.getElementById('app');
+        const app = document.getElementById('app');
 
-    // 2. Render Loop
-    standardTests.forEach(test => {
-        app.innerHTML += `
+        standardTests.forEach(test => {
+            app.innerHTML += `
             <div class="check-card" id="card-${test.id}">
                 <div class="test-title">${test.title}</div>
-                <div class="std-ref">Ref: ${test.clause} | Required: ${test.operator} ${test.limit}</div>
+                <div class="std-ref">Ref: ${test.clause} | Limit: ${test.operator} ${test.limit}</div>
                 
                 <div class="input-group">
-                    <label>Enter ${test.input_label}:</label>
-                    <input type="number" step="0.01" id="input-${test.id}" placeholder="0.00">
-                    <button class="btn-check" onclick="evaluateTest(${test.id})">Verify</button>
+                    <label>${test.input_label}</label>
+                    <div class="input-row">
+                        <input type="number" step="0.01" id="input-${test.id}" placeholder="0.00">
+                        <button class="btn-check" onclick="evaluateTest(${test.id})">Verify</button>
+                    </div>
                 </div>
 
                 <div id="result-${test.id}" class="result-box"></div>
             </div>
         `;
-    });
+        });
 
-    // 3. The Brain Logic
-    function evaluateTest(id) {
-        const test = standardTests.find(t => t.id === id);
-        const userValue = parseFloat(document.getElementById(`input-${id}`).value);
-        const resultBox = document.getElementById(`result-${id}`);
-        const card = document.getElementById(`card-${id}`);
+        function evaluateTest(id) {
+            const test = standardTests.find(t => t.id === id);
+            const inputElem = document.getElementById(`input-${id}`);
+            const userValue = parseFloat(inputElem.value);
+            const resultBox = document.getElementById(`result-${id}`);
+            const card = document.getElementById(`card-${id}`);
 
-        if (isNaN(userValue)) {
-            alert("Please enter a number!");
-            return;
+            if (isNaN(userValue)) {
+                inputElem.style.borderColor = "red";
+                setTimeout(() => inputElem.style.borderColor = "#e2e8f0", 1000);
+                return;
+            }
+
+            let passed = false;
+            if (test.operator === "<" && userValue < test.limit) passed = true;
+            if (test.operator === ">" && userValue > test.limit) passed = true;
+
+            if (passed) {
+                card.className = "check-card passed";
+                resultBox.className = "result-box pass";
+                resultBox.style.display = "block";
+                resultBox.innerHTML = `✅ <b>PASS</b><br>Value is within safe limits.`;
+            } else {
+                card.className = "check-card failed";
+                resultBox.className = "result-box fail";
+                resultBox.style.display = "block";
+                resultBox.innerHTML = `❌ <b>FAIL</b><br><b>Action:</b> ${test.fix_advice}`;
+            }
         }
-
-        // Check Pass/Fail
-        let passed = false;
-        if (test.operator === "<" && userValue < test.limit) passed = true;
-        if (test.operator === ">" && userValue > test.limit) passed = true;
-
-        if (passed) {
-            // PASS LOGIC
-            card.className = "check-card passed";
-            resultBox.className = "result-box pass";
-            resultBox.style.display = "block";
-            resultBox.innerHTML = `✅ <b>PASS:</b> Value is within safe limits.`;
-        } else {
-            // FAIL LOGIC
-            card.className = "check-card failed";
-            resultBox.className = "result-box fail";
-            resultBox.style.display = "block";
-            resultBox.innerHTML = `
-                ❌ <b>FAIL:</b> Value is unsafe.<br>
-                <b>Corrective Action:</b> ${test.fix_advice}
-            `;
-        }
-    }
-</script>
+    </script>
 
 </body>
+
 </html>
