@@ -1,270 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StandardSimplified | Smart Audit</title>
     <style>
-        /* THE MAGIC FIX: This handles the width calculation correctly */
-        * {
-            box-sizing: border-box;
-        }
+        /* CSS Reset for Box Model */
+        * { box-sizing: border-box; }
 
-        :root {
-            --primary: #2563eb;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --bg: #f1f5f9;
-            --card: #ffffff;
+        :root { 
+            --primary: #2563eb; 
+            --success: #16a34a; 
+            --danger: #dc2626; 
+            --bg: #f1f5f9; 
+            --card: #ffffff; 
             --text: #1e293b;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            padding: 15px;
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg); 
+            padding: 15px; 
             margin: 0;
-            color: var(--text);
+            color: var(--text); 
             -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
             width: 100%;
         }
-
+        
         /* Header */
-        header {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
+        header { 
+            background: var(--card); 
+            padding: 20px; 
+            border-radius: 16px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
+            display: flex; 
+            flex-direction: row; 
+            justify-content: space-between; 
+            align-items: center; 
         }
 
-        .logo {
-            font-weight: 800;
-            color: var(--primary);
-            font-size: 1.3rem;
+        .logo { 
+            font-weight: 800; 
+            color: var(--primary); 
+            font-size: 1.3rem; 
             letter-spacing: -0.5px;
         }
 
         .client-name {
-            font-size: 0.85rem;
+            font-size: 0.85rem; 
             color: #64748b;
             text-align: right;
             line-height: 1.2;
         }
-
+        
         /* Cards */
-        .check-card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-            border-left: 6px solid #cbd5e1;
+        .check-card { 
+            background: var(--card); 
+            border-radius: 16px; 
+            padding: 20px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); 
+            border-left: 6px solid #cbd5e1; 
             transition: transform 0.2s;
             overflow: hidden;
-            /* Prevents anything from sticking out */
         }
 
-        .check-card.passed {
-            border-left-color: var(--success);
-        }
-
-        .check-card.failed {
-            border-left-color: var(--danger);
-        }
-
-        .test-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .std-ref {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-bottom: 15px;
-            font-family: monospace;
-        }
+        .check-card.passed { border-left-color: var(--success); }
+        .check-card.failed { border-left-color: var(--danger); }
+        
+        .test-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+        .std-ref { font-size: 0.8rem; color: #64748b; margin-bottom: 15px; font-family: monospace; }
 
         /* Inputs */
-        .input-group {
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 12px;
+        .input-group { 
+            background: #f8fafc; 
+            padding: 15px; 
+            border-radius: 12px; 
             border: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
-        label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #475569;
-        }
+        label { font-weight: 600; font-size: 0.9rem; color: #475569; }
 
         .input-row {
             display: flex;
             gap: 10px;
             width: 100%;
-            /* Force row to fit container */
         }
 
-        input {
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            text-align: center;
+        input { 
+            padding: 12px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 8px; 
+            font-size: 1.1rem; 
+            text-align: center; 
             width: 100%;
-            /* Now works because of box-sizing */
             outline: none;
             transition: border-color 0.2s;
             min-width: 0;
-            /* Prevents flexbox overflow */
         }
 
-        input:focus {
-            border-color: var(--primary);
-        }
+        input:focus { border-color: var(--primary); }
 
-        .btn-check {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
+        .btn-check { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 600; 
             font-size: 1rem;
             flex-shrink: 0;
         }
-
-        .btn-check:active {
-            transform: scale(0.96);
-        }
+        .btn-check:active { transform: scale(0.96); }
 
         /* Results */
-        .result-box {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 8px;
-            display: none;
+        .result-box { 
+            margin-top: 15px; 
+            padding: 15px; 
+            border-radius: 8px; 
+            display: none; 
             font-size: 0.95rem;
             line-height: 1.5;
         }
-
-        .result-box.fail {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-        }
-
-        .result-box.pass {
-            background: #f0fdf4;
-            color: #166534;
-            border: 1px solid #bbf7d0;
-        }
+        .result-box.fail { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .result-box.pass { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
 
         /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 480px) {
-            header {
-                flex-direction: column;
-                gap: 5px;
-                align-items: flex-start;
-            }
-
-            .client-name {
-                text-align: left;
-            }
-
-            /* Stack button below input on very small screens */
-            .input-row {
-                flex-direction: column;
-            }
-
-            .btn-check {
-                width: 100%;
-            }
+            header { flex-direction: column; gap: 5px; align-items: flex-start; }
+            .client-name { text-align: left; }
+            .input-row { flex-direction: column; } 
+            .btn-check { width: 100%; }
         }
     </style>
 </head>
-
 <body>
 
-    <div class="container">
-        <header>
-            <div class="logo">StandardSimplified ⚡</div>
-            <div class="client-name">
-                Client: <b>Slidewell Pvt Ltd</b><br>
-                <span style="font-size:0.75rem; color:#94a3b8;">Ref: Manak Manthan</span>
-            </div>
-        </header>
-
-        <div id="app"></div>
-
-        <div style="text-align:center; color:#94a3b8; font-size:0.8rem; margin-top:30px;">
-            Built by Standards Club, KKWIEER 🎓
+<div class="container">
+    <header>
+        <div class="logo">StandardSimplified ⚡</div>
+        <div class="client-name">
+            Client: <b>Slidewell Pvt Ltd</b><br>
+            <span style="font-size:0.75rem; color:#94a3b8;">Ref: Manak Manthan</span>
         </div>
+    </header>
+
+    <div id="app"></div>
+    
+    <div style="text-align:center; color:#94a3b8; font-size:0.8rem; margin-top:30px;">
+        Built by Standards Club, KKWIEER 🎓
     </div>
+</div>
 
-    <script>
-        const standardTests = [
-            {
-                id: 1,
-                title: "Leakage Current Test",
-                clause: "IS 302-1 Clause 13.2",
-                input_label: "Measured Current (mA)",
-                limit: 0.75,
-                operator: "<",
-                fix_advice: "Check heating element insulation (Mica sheet). Ensure no moisture ingress."
-            },
-            {
-                id: 2,
-                title: "High Voltage Test",
-                clause: "IS 302-1 Clause 13.3",
-                input_label: "Breakdown Voltage (kV)",
-                limit: 1.5,
-                operator: ">",
-                fix_advice: "Insulation weak. Bake component at 80°C for 2 hours to remove moisture."
-            },
-            {
-                id: 3,
-                title: "Earthing Resistance",
-                clause: "IS 302-1 Clause 27",
-                input_label: "Resistance (Ohms)",
-                limit: 0.1,
-                operator: "<",
-                fix_advice: "Tighten green wire screw. Clean rust from chassis contact point."
-            },
-            {
-                "id": 3,
-                "title": "Heating Test Overpower Setup",
-                "clause": "IS 302-1 Clause 13.1",
-                "input_label": "Rated Power Input Multiplier",
-                "limit": 1.15,
-                "operator": "=",
-                "fix_advice": "Adjust the voltage regulator until the wattmeter reads exactly 1.15 times the rated power."
-            }
-        ];
+<script>
+    // 1. DATA: The Rules extracted from BIS IS 302
+    const standardTests = [
+        { 
+            id: 1, 
+            title: "Leakage Current Test", 
+            clause: "IS 302-1 Clause 13.2", 
+            input_label: "Measured Current (mA)", 
+            limit: 0.75, 
+            operator: "<", 
+            fix_advice: "Check heating element insulation (Mica sheet). Ensure no moisture ingress."
+        },
+        { 
+            id: 2, 
+            title: "High Voltage Test", 
+            clause: "IS 302-1 Clause 13.3", 
+            input_label: "Breakdown Voltage (kV)", 
+            limit: 1.5, 
+            operator: ">", 
+            fix_advice: "Insulation weak. Bake component at 80°C for 2 hours to remove moisture."
+        },
+        { 
+            id: 3, 
+            title: "Earthing Resistance", 
+            clause: "IS 302-1 Clause 27", 
+            input_label: "Resistance (Ohms)", 
+            limit: 0.1, 
+            operator: "<", 
+            fix_advice: "Tighten green wire screw. Clean rust from chassis contact point."
+        },
+        {
+            id: 4,
+            title: "Heating Test Setup",
+            clause: "IS 302-1 Clause 13.1",
+            input_label: "Input Power Multiplier",
+            limit: 1.15,
+            operator: "=",
+            fix_advice: "Adjust the voltage regulator until wattmeter reads EXACTLY 1.15x rated power."
+        }
+    ];
 
-        const app = document.getElementById('app');
+    const app = document.getElementById('app');
 
-        standardTests.forEach(test => {
-            app.innerHTML += `
+    // 2. RENDER: Create the cards
+    standardTests.forEach(test => {
+        let opSymbol = test.operator;
+        if(opSymbol === "=") opSymbol = "="; // Just for display
+
+        app.innerHTML += `
             <div class="check-card" id="card-${test.id}">
                 <div class="test-title">${test.title}</div>
-                <div class="std-ref">Ref: ${test.clause} | Limit: ${test.operator} ${test.limit}</div>
+                <div class="std-ref">Ref: ${test.clause} | Required: ${opSymbol} ${test.limit}</div>
                 
                 <div class="input-group">
                     <label>${test.input_label}</label>
@@ -277,39 +226,49 @@
                 <div id="result-${test.id}" class="result-box"></div>
             </div>
         `;
-        });
+    });
 
-        function evaluateTest(id) {
-            const test = standardTests.find(t => t.id === id);
-            const inputElem = document.getElementById(`input-${id}`);
-            const userValue = parseFloat(inputElem.value);
-            const resultBox = document.getElementById(`result-${id}`);
-            const card = document.getElementById(`card-${id}`);
+    // 3. LOGIC: The "Brain" that checks Pass/Fail
+    function evaluateTest(id) {
+        const test = standardTests.find(t => t.id === id);
+        const inputElem = document.getElementById(`input-${id}`);
+        const userValue = parseFloat(inputElem.value);
+        const resultBox = document.getElementById(`result-${id}`);
+        const card = document.getElementById(`card-${id}`);
 
-            if (isNaN(userValue)) {
-                inputElem.style.borderColor = "red";
-                setTimeout(() => inputElem.style.borderColor = "#e2e8f0", 1000);
-                return;
-            }
-
-            let passed = false;
-            if (test.operator === "<" && userValue < test.limit) passed = true;
-            if (test.operator === ">" && userValue > test.limit) passed = true;
-
-            if (passed) {
-                card.className = "check-card passed";
-                resultBox.className = "result-box pass";
-                resultBox.style.display = "block";
-                resultBox.innerHTML = `✅ <b>PASS</b><br>Value is within safe limits.`;
-            } else {
-                card.className = "check-card failed";
-                resultBox.className = "result-box fail";
-                resultBox.style.display = "block";
-                resultBox.innerHTML = `❌ <b>FAIL</b><br><b>Action:</b> ${test.fix_advice}`;
-            }
+        if (isNaN(userValue)) {
+            inputElem.style.borderColor = "red";
+            setTimeout(() => inputElem.style.borderColor = "#e2e8f0", 1000);
+            return;
         }
-    </script>
+
+        let passed = false;
+
+        // Logic for Less Than (<)
+        if (test.operator === "<" && userValue < test.limit) passed = true;
+        
+        // Logic for Greater Than (>)
+        if (test.operator === ">" && userValue > test.limit) passed = true;
+
+        // Logic for Equal To (=) -- The New Fix!
+        // We use a small range (0.001) just in case user types 1.150
+        if (test.operator === "=" && Math.abs(userValue - test.limit) < 0.001) passed = true;
+
+        if (passed) {
+            // PASS UI
+            card.className = "check-card passed";
+            resultBox.className = "result-box pass";
+            resultBox.style.display = "block";
+            resultBox.innerHTML = `✅ <b>PASS</b><br>Value is compliant.`;
+        } else {
+            // FAIL UI
+            card.className = "check-card failed";
+            resultBox.className = "result-box fail";
+            resultBox.style.display = "block";
+            resultBox.innerHTML = `❌ <b>FAIL</b><br><b>Action:</b> ${test.fix_advice}`;
+        }
+    }
+</script>
 
 </body>
-
 </html>
